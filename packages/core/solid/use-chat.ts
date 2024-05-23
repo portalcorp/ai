@@ -86,8 +86,7 @@ export function useChat({
   streamMode,
   generateId = generateIdFunc,
 }: Omit<UseChatOptions, 'api'> & {
-  api?: string;
-  key?: string;
+  api?: string | Accessor<string>;
 } = {}): UseChatHelpers & {
   experimental_addToolResult: ({
     toolCallId,
@@ -100,7 +99,9 @@ export function useChat({
   // Generate a unique ID for the chat if not provided.
   const chatId = id || `chat-${uniqueId++}`;
 
-  const key = `${api}|${chatId}`;
+  const getApi = () => (typeof api === 'string' ? api : api());
+
+  const key = `${getApi()}|${chatId}`;
 
   // Because of the `initialData` option, the `data` will never be `undefined`:
   const messages = useSWRStore(chatApiStore, () => [key], {
@@ -188,7 +189,7 @@ export function useChat({
           const existingData = streamData() ?? [];
 
           return await callChatApi({
-            api,
+            api: getApi(),
             messages: constructedMessagesPayload,
             body: {
               data: chatRequest.data,
