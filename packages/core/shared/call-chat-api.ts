@@ -16,7 +16,7 @@ export async function callChatApi({
   onFinish,
   generateId,
 }: {
-  api: string;
+  api: string | (() => string);
   messages: Omit<Message, 'id'>[];
   body: Record<string, any>;
   streamMode?: 'stream-data' | 'text';
@@ -29,7 +29,8 @@ export async function callChatApi({
   onFinish?: (message: Message) => void;
   generateId: IdGenerator;
 }) {
-  const response = await fetch(api, {
+  const getApi = () => (typeof api === 'string' ? api : api());
+  const response = await fetch(getApi(), {
     method: 'POST',
     body: JSON.stringify({
       messages,

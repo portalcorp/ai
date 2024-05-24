@@ -189,7 +189,7 @@ export function useChat({
           const existingData = streamData() ?? [];
 
           return await callChatApi({
-            api: getApi(),
+            api,
             messages: constructedMessagesPayload,
             body: {
               data: chatRequest.data,
