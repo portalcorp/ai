@@ -7,7 +7,7 @@ export default function Chat() {
   const {
     messages,
     input,
-    handleInputChange,
+    setInput,
     handleSubmit,
     experimental_addToolResult,
   } = useChat({ api: '/api/use-chat-client-tool' });
@@ -82,7 +82,7 @@ export default function Chat() {
           class="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
           value={input()}
           placeholder="Say something..."
-          onChange={handleInputChange}
+          onChange={event => setInput(event.target.value)}
         />
       </form>
     </div>
